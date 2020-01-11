@@ -27,7 +27,7 @@ export class ProfilePage {
       this.clienteService.findByEmail(localUser.email)
       .subscribe(response => {
         this.cliente = response;
-        
+        this.getImageIfExits();
       },
       error => {})
     }
@@ -36,6 +36,7 @@ export class ProfilePage {
   getImageIfExits() {
     this.clienteService.getImagemFromBucket(this.cliente.id)
     .subscribe(response => {
+      console.log(response)
       this.cliente.imageUrl = `${API_CONFIG.bucketBaseUrl}/cp${this.cliente.id}.jpg`;
     },
     error => {});
