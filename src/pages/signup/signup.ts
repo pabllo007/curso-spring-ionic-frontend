@@ -38,8 +38,8 @@ export class SignupPage {
         telefone1: ['981464558', [Validators.required]],
         telefone2: ['', []],
         telefone3: ['', []],
-        estadoId: [null, []],
-        cidadeId: [null, []]
+        estadoId: [null, [Validators.required]],
+        cidadeId: [null, [Validators.required]]
       });
   }
 
@@ -64,6 +64,6 @@ export class SignupPage {
   }
 
   signupUser() {
-    console.log('envou os dados')
+    console.log('enviou os dados')
   }
 }
