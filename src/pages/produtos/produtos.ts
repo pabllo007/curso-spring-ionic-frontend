@@ -38,4 +38,8 @@ export class ProdutosPage {
       error =>{});
     }
   }
+
+  showDatail(){
+    this.navCtrl.push('ProdutoDetailPage');
+  }
 }
