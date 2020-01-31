@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { EnderecoDTO } from '../../models/endereco.dto';
+import { StorageService } from '../../services/storage.service';
+import { ClienteService } from '../../services/domain/cliente.service';
 
 @IonicPage()
 @Component({
@@ -11,44 +13,28 @@ export class PickAddressPage {
 
   items: EnderecoDTO[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public storage: StorageService,
+    public clienteService: ClienteService) {
   }
 
   ionViewDidLoad() {
-    this.items = [{
-      id: "1",
-      logradouro : "Condominio Jardim Europa 2",
-      numero : "6",
-      complemento : "DF-150",
-      bairro : "Grande Colorado",
-      cep : "73105904",
-      cidade : {
-        id : "1",
-        nome: "Brasilia",
-        estado: {
-          id : "1",
-          nome: "Distrito Federal"
+    let localUser = this.storage.getLocalUser();
+    if (localUser && localUser.email) {
+      this.clienteService.findByEmail(localUser.email)
+      .subscribe(response => {
+        this.items = response['enderecos'];
+      },
+      error => {
+        if(error.status == 403) {
+          this.navCtrl.setRoot('HomePage');
         }
-      }
-    },
-    {
-      id: "2",
-      logradouro : "Rua Jose Raimundo da Silva",
-      numero : "141",
-      complemento : "",
-      bairro : "Vila",
-      cep : "7000000",
-      cidade : {
-        id : "1",
-        nome: "Guaratingueta",
-        estado: {
-          id : "2",
-          nome: "Sao Paulo"
-      
-        }  
-      }
+      })
+    } else {
+      this.navCtrl.setRoot('HomePage');
     }
-  ]
   }
 
 }
